@@ -12,6 +12,7 @@ export interface Producto {
   categoriaId?: number;
   categoria?: Categoria;
   activo: boolean;
+  imageUrl?: string;
   fechaCreacion: Date;
   fechaActualizacion: Date;
 }
@@ -26,6 +27,7 @@ export interface ProductoCreateDto {
   stock?: number;
   categoriaId?: number;
   activo?: boolean;
+  imageUrl?: string;
 }
 
 export interface ProductoUpdateDto {
@@ -38,6 +40,7 @@ export interface ProductoUpdateDto {
   stock?: number;
   categoriaId?: number;
   activo?: boolean;
+  imageUrl?: string;
 }
 
 // Validaciones para el modelo Producto

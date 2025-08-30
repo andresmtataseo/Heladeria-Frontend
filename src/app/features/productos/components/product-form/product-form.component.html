@@ -43,6 +43,20 @@
         <p class="label">Opcional</p>
       </fieldset>
 
+      <!-- URL de la imagen -->
+      <fieldset class="fieldset mb-4">
+        <legend class="fieldset-legend">URL de la imagen</legend>
+        <input
+          type="url"
+          name="imageUrl"
+          [(ngModel)]="formData.imageUrl"
+          placeholder="https://ejemplo.com/imagen.jpg"
+          class="input input-bordered w-full"
+          #imageUrl="ngModel" />
+        <p class="label">Opcional - URL de la imagen del producto</p>
+        <p class="label text-error" *ngIf="imageUrl.invalid && imageUrl.touched">Ingrese una URL válida</p>
+      </fieldset>
+
       <!-- Precio y Stock en una fila -->
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
         <!-- Precio -->

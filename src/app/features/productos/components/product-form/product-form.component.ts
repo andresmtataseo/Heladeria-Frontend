@@ -26,7 +26,8 @@ export class ProductFormComponent implements OnInit, OnChanges {
     cantidadMinimaMayorista: 0,
     stock: 0,
     categoriaId: 0,
-    activo: true
+    activo: true,
+    imageUrl: ''
   };
 
   categorias: Categoria[] = [];
@@ -49,7 +50,8 @@ export class ProductFormComponent implements OnInit, OnChanges {
         cantidadMinimaMayorista: this.producto.cantidadMinimaMayorista || 0,
         stock: this.producto.stock,
         categoriaId: this.producto.categoria?.id || 0,
-        activo: this.producto.activo
+        activo: this.producto.activo,
+        imageUrl: this.producto.imageUrl || ''
       };
     } else if (changes['producto'] && !this.producto) {
       this.resetForm();
@@ -121,7 +123,8 @@ export class ProductFormComponent implements OnInit, OnChanges {
       cantidadMinimaMayorista: 0,
       stock: 0,
       categoriaId: 0,
-      activo: true
+      activo: true,
+      imageUrl: ''
     };
   }
 }
