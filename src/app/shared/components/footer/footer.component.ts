@@ -28,7 +28,7 @@ export class FooterComponent {
   readonly companyInfo: CompanyInfo = {
     name: 'Helados Don Alonso',
     description: 'Los mejores helados artesanales desde 2020',
-    phone: '+58 424 123 4567',
+    phone: '+58 424-6563703',
     email: 'heladosdonalonso@gmail.com'
   };
 
@@ -40,12 +40,12 @@ export class FooterComponent {
     },
     {
       name: 'TikTok',
-      url: 'https://tiktok.com/@heladosdonalonso',
+      url: 'https://www.tiktok.com/@heladosdonalonsomcbo',
       icon: 'tiktok'
     },
     {
       name: 'WhatsApp',
-      url: 'https://wa.me/15551234567',
+      url: 'https://wa.me/584246563703',
       icon: 'whatsapp'
     }
   ];

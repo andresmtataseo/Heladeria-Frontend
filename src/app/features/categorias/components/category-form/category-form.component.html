@@ -1,0 +1,24 @@
+<form>
+  <h2>{{ isEdit ? 'Editar Categoría' : 'Crear Categoría' }}</h2>
+
+  <div>
+    <label for="nombre">Nombre:</label>
+    <input type="text" id="nombre" name="nombre" required>
+  </div>
+
+  <div>
+    <label for="descripcion">Descripción:</label>
+    <textarea id="descripcion" name="descripcion" rows="3"></textarea>
+  </div>
+
+  <div>
+    <label>
+      <input type="checkbox" name="activo"> Activo
+    </label>
+  </div>
+
+  <div>
+    <button type="submit">{{ isEdit ? 'Actualizar' : 'Crear' }}</button>
+    <button type="button" (click)="onCancel.emit()">Cancelar</button>
+  </div>
+</form>

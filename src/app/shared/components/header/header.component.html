@@ -7,14 +7,15 @@
         </svg>
       </div>
       <ul tabindex="0" class="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow">
-        <li><a class="text-black" routerLink="/">Inicio</a></li>
-        <li><a class="text-black" routerLink="/products">Catálogo</a></li>
-        <li><a class="text-black" routerLink="/products/manage">Gestionar Productos</a></li>
+        <li><a class="text-black hover:bg-base-200 transition-colors duration-200" routerLink="/home" routerLinkActive="bg-primary text-primary-content font-semibold rounded-lg">Inicio</a></li>
+        <li><a class="text-black hover:bg-base-200 transition-colors duration-200" routerLink="/catalogo" routerLinkActive="bg-primary text-primary-content font-semibold rounded-lg">Catálogo</a></li>
+        <li><a class="text-black hover:bg-base-200 transition-colors duration-200" routerLink="/admin/productos" routerLinkActive="bg-primary text-primary-content font-semibold rounded-lg">Gestionar Productos</a></li>
+        <li><a class="text-black hover:bg-base-200 transition-colors duration-200" routerLink="/admin/categorias" routerLinkActive="bg-primary text-primary-content font-semibold rounded-lg">Gestionar Categorías</a></li>
       </ul>
     </div>
   </div>
   <div class="navbar-center">
-    <a class="text-xl" routerLink="/">{{ title || 'Helados Don Alonso' }}</a>
+    <a class="text-xl font-bold hover:opacity-80 transition-opacity duration-200" routerLink="/home">{{ title || 'Helados Don Alonso' }}</a>
   </div>
   <div class="navbar-end">
     <button class="btn btn-ghost btn-circle">

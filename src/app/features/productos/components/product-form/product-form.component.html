@@ -1,0 +1,23 @@
+<form>
+  <h2>{{ isEdit ? 'Editar Producto' : 'Crear Producto' }}</h2>
+
+  <div>
+    <label for="nombre">Nombre:</label>
+    <input type="text" id="nombre" name="nombre" required>
+  </div>
+
+  <div>
+    <label for="sabor">Sabor:</label>
+    <input type="text" id="sabor" name="sabor" required>
+  </div>
+
+  <div>
+    <label for="precio">Precio:</label>
+    <input type="number" id="precio" name="precio" step="0.01" required>
+  </div>
+
+  <div>
+    <button type="submit">{{ isEdit ? 'Actualizar' : 'Crear' }}</button>
+    <button type="button" (click)="onCancel.emit()">Cancelar</button>
+  </div>
+</form>

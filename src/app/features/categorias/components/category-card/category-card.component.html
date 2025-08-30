@@ -1,0 +1,5 @@
+<div>
+  <h3>{{ categoria?.nombre }}</h3>
+  <p>{{ categoria?.descripcion }}</p>
+  <span [class.activo]="categoria?.activo">{{ categoria?.activo ? 'Activo' : 'Inactivo' }}</span>
+</div>
