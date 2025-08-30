@@ -1,24 +1,51 @@
-<form>
-  <h2>{{ isEdit ? 'Editar Categoría' : 'Crear Categoría' }}</h2>
+<div class="card bg-base-100 shadow-xl">
+  <div class="card-body">
+    <h2 class="card-title mb-4">{{ isEdit ? 'Editar Categoría' : 'Nueva Categoría' }}</h2>
 
-  <div>
-    <label for="nombre">Nombre:</label>
-    <input type="text" id="nombre" name="nombre" required>
-  </div>
+    <form (ngSubmit)="submitForm()" #categoryForm="ngForm">
+      <!-- Nombre -->
+      <fieldset class="fieldset mb-4">
+        <legend class="fieldset-legend">Nombre de la categoría</legend>
+        <input
+          type="text"
+          name="nombre"
+          [(ngModel)]="formData.nombre"
+          placeholder="Ingrese el nombre de la categoría"
+          class="input input-bordered w-full"
+          required
+          #nombre="ngModel" />
+        <p class="label text-error" *ngIf="nombre.invalid && nombre.touched">El nombre es requerido</p>
+      </fieldset>
 
-  <div>
-    <label for="descripcion">Descripción:</label>
-    <textarea id="descripcion" name="descripcion" rows="3"></textarea>
-  </div>
+      <!-- Descripción -->
+      <fieldset class="fieldset mb-4">
+        <legend class="fieldset-legend">Descripción</legend>
+        <textarea
+          name="descripcion"
+          [(ngModel)]="formData.descripcion"
+          class="textarea textarea-bordered w-full"
+          placeholder="Ingrese la descripción de la categoría"></textarea>
+        <p class="label">Opcional</p>
+      </fieldset>
 
-  <div>
-    <label>
-      <input type="checkbox" name="activo"> Activo
-    </label>
-  </div>
+      <!-- Estado Activo -->
+      <fieldset class="fieldset mb-6">
+        <legend class="fieldset-legend">Estado de la categoría</legend>
+        <label class="label cursor-pointer justify-start">
+          <input
+            type="checkbox"
+            name="activo"
+            [(ngModel)]="formData.activo"
+            class="checkbox checkbox-primary mr-3" />
+          <span class="label-text">Categoría activa</span>
+        </label>
+      </fieldset>
 
-  <div>
-    <button type="submit">{{ isEdit ? 'Actualizar' : 'Crear' }}</button>
-    <button type="button" (click)="onCancel.emit()">Cancelar</button>
+      <!-- Botones -->
+      <div class="card-actions justify-end">
+        <button type="button" class="btn btn-ghost" (click)="cancelForm()">Cancelar</button>
+        <button type="submit" class="btn btn-primary" [disabled]="categoryForm.invalid">{{ isEdit ? 'Actualizar' : 'Crear' }}</button>
+      </div>
+    </form>
   </div>
-</form>
+</div>

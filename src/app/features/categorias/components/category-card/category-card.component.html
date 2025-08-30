@@ -1,5 +1,14 @@
-<div>
-  <h3>{{ categoria?.nombre }}</h3>
-  <p>{{ categoria?.descripcion }}</p>
-  <span [class.activo]="categoria?.activo">{{ categoria?.activo ? 'Activo' : 'Inactivo' }}</span>
+<div class="card bg-base-100 shadow-xl transition-all duration-300 hover:shadow-2xl hover:scale-105 hover:-translate-y-1 cursor-pointer">
+  <div class="card-body">
+    <div class="flex justify-between items-start">
+      <h2 class="card-title">{{ categoria.nombre }}</h2>
+      <div class="badge" [ngClass]="categoria.activo ? 'badge-success' : 'badge-error'">
+        {{ categoria.activo ? 'Activo' : 'Inactivo' }}
+      </div>
+    </div>
+    <p class="text-base-content/70">{{ categoria.descripcion }}</p>
+    <div class="card-actions justify-end mt-4">
+      <button class="btn btn-warning btn-sm" (click)="editCategory()">Editar</button>
+    </div>
+  </div>
 </div>

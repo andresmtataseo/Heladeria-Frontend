@@ -1,4 +1,63 @@
-<div>
-  <h1>Gestión de Categorías</h1>
-  <!-- Aquí irá la tabla de categorías con opciones CRUD -->
+<div class="container mx-auto p-6">
+  <!-- Header -->
+  <div class="flex justify-between items-center mb-4">
+    <div>
+      <h1 class="text-3xl font-bold">Gestión de Categorías</h1>
+      <p class="text-base-content/70 mt-1">Administra las categorías de productos</p>
+    </div>
+  </div>
+
+  <!-- Search and Filter -->
+      <div class="flex flex-col md:flex-row justify-between items-center gap-4  mb-4">
+        <div class="form-control w-full md:w-1/3">
+          <label class="input input-bordered flex items-center gap-2">
+            <svg class="h-[1em] opacity-50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+              <g stroke-linejoin="round" stroke-linecap="round" stroke-width="2.5" fill="none" stroke="currentColor">
+                <circle cx="11" cy="11" r="8"></circle>
+                <path d="m21 21-4.3-4.3"></path>
+              </g>
+            </svg>
+            <input type="search" placeholder="Buscar categorías..." class="grow" [(ngModel)]="searchTerm"
+              (input)="filterCategorias()" />
+          </label>
+        </div>
+        <div class="form-control w-full md:w-1/3">
+          <select class="select select-bordered w-full" [(ngModel)]="statusFilter" (change)="filterCategorias()">
+            <option value="all">Todos los estados</option>
+            <option value="active">Solo activas</option>
+            <option value="inactive">Solo inactivas</option>
+          </select>
+        </div>
+        <button class="btn btn-primary w-full md:w-1/3" (click)="openCreateForm()">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24"
+            stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+          </svg>
+          Nueva Categoría
+        </button>
+      </div>
+
+  <!-- Categories Grid -->
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-6" *ngIf="!showForm">
+    <app-category-card *ngFor="let categoria of filteredCategorias" [categoria]="categoria"
+      (onEdit)="editCategory($event)">
+    </app-category-card>
+  </div>
+
+  <!-- Empty State -->
+  <div class="text-center py-12" *ngIf="filteredCategorias.length === 0 && !showForm">
+    <div class="text-6xl mb-4">📂</div>
+    <h3 class="text-xl font-semibold mb-2">No hay categorías</h3>
+    <p class="text-base-content/70 mb-4">Comienza creando tu primera categoría</p>
+    <button class="btn btn-primary" (click)="openCreateForm()">Crear Categoría</button>
+  </div>
+
+  <!-- Form Modal/Section -->
+  <div class="fixed inset-0 bg-black/20 backdrop-blur-sm flex items-center justify-center z-50" *ngIf="showForm">
+    <div class="max-w-md w-full mx-4">
+      <app-category-form [categoria]="selectedCategory" [isEdit]="isEditMode" (onSubmit)="handleFormSubmit($event)"
+        (onCancel)="closeForm()">
+      </app-category-form>
+    </div>
+  </div>
 </div>
