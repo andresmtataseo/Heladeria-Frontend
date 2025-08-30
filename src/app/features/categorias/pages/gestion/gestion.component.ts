@@ -6,11 +6,12 @@ import { CategoriaService } from '../../../../core/services/categoria.service';
 import { ErrorHandlerService } from '../../../../core/services/error-handler.service';
 import { CategoryCardComponent } from '../../components/category-card/category-card.component';
 import { CategoryFormComponent } from '../../components/category-form/category-form.component';
+import { LoadingSpinnerComponent } from '../../../../shared/components/loading-spinner/loading-spinner.component';
 
 @Component({
   selector: 'app-gestion-categorias',
   standalone: true,
-  imports: [NgFor, NgIf, FormsModule, CategoryCardComponent, CategoryFormComponent],
+  imports: [NgFor, NgIf, FormsModule, CategoryCardComponent, CategoryFormComponent, LoadingSpinnerComponent],
   templateUrl: './gestion.component.html',
   styleUrl: './gestion.component.css'
 })
@@ -22,6 +23,7 @@ export class GestionCategoriasComponent implements OnInit {
   isEditMode = false;
   searchTerm = '';
   statusFilter = 'all';
+  isLoading = false;
 
   constructor(
     private categoriaService: CategoriaService,
@@ -45,14 +47,17 @@ export class GestionCategoriasComponent implements OnInit {
   }
 
   loadCategorias() {
+    this.isLoading = true;
     this.categoriaService.getCategorias().subscribe({
       next: (categorias) => {
         this.categorias = categorias;
         this.filterCategorias();
+        this.isLoading = false;
       },
       error: (error) => {
         // El error ya es manejado por el servicio
         console.error('Error al cargar categorías:', error);
+        this.isLoading = false;
       }
     });
   }
@@ -93,6 +98,7 @@ export class GestionCategoriasComponent implements OnInit {
 
   deleteCategory(categoriaId: number) {
     if (confirm('¿Estás seguro de que deseas eliminar esta categoría?')) {
+      this.isLoading = true;
       this.categoriaService.deleteCategoria(categoriaId).subscribe({
         next: () => {
           this.errorHandler.showSuccess(
@@ -104,12 +110,14 @@ export class GestionCategoriasComponent implements OnInit {
         error: (error) => {
           // El error ya es manejado por el servicio
           console.error('Error al eliminar categoría:', error);
+          this.isLoading = false;
         }
       });
     }
   }
 
   handleFormSubmit(formData: CategoriaCreateDto | CategoriaUpdateDto) {
+    this.isLoading = true;
     if (this.isEditMode && this.selectedCategory) {
       // Actualizar categoría existente
       const updateData = formData as CategoriaUpdateDto;
@@ -125,6 +133,7 @@ export class GestionCategoriasComponent implements OnInit {
         error: (error) => {
           // El error ya es manejado por el servicio
           console.error('Error al actualizar categoría:', error);
+          this.isLoading = false;
         }
       });
     } else {
@@ -141,6 +150,7 @@ export class GestionCategoriasComponent implements OnInit {
         error: (error) => {
           // El error ya es manejado por el servicio
           console.error('Error al crear categoría:', error);
+          this.isLoading = false;
         }
       });
     }

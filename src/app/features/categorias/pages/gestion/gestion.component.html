@@ -1,4 +1,11 @@
 <div class="container mx-auto p-6">
+  <!-- Loading Spinner -->
+  <app-loading-spinner 
+    [isLoading]="isLoading" 
+    message="Cargando categorías..." 
+    [showMessage]="true">
+  </app-loading-spinner>
+
   <!-- Header -->
   <div class="flex justify-between items-center mb-4">
     <div>
