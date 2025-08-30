@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { catchError, map } from 'rxjs/operators';
 import { Producto, ProductoCreateDto, ProductoUpdateDto } from '../models';
 import { ErrorHandlerService } from './error-handler.service';
 
@@ -17,8 +17,9 @@ export class ProductoService {
   ) { }
 
   getProductos(): Observable<Producto[]> {
-    return this.http.get<Producto[]>(this.apiUrl)
+    return this.http.get<any[]>(this.apiUrl)
       .pipe(
+        map(productos => productos.map(p => this.mapBackendToFrontend(p))),
         catchError((error: HttpErrorResponse) => {
           this.errorHandler.handleProductError(error, 'obtener productos');
           return throwError(() => error);
@@ -27,8 +28,9 @@ export class ProductoService {
   }
 
   getProducto(id: number): Observable<Producto> {
-    return this.http.get<Producto>(`${this.apiUrl}/${id}`)
+    return this.http.get<any>(`${this.apiUrl}/${id}`)
       .pipe(
+        map(producto => this.mapBackendToFrontend(producto)),
         catchError((error: HttpErrorResponse) => {
           this.errorHandler.handleProductError(error, 'obtener producto');
           return throwError(() => error);
@@ -37,8 +39,20 @@ export class ProductoService {
   }
 
   createProducto(producto: ProductoCreateDto): Observable<Producto> {
-    return this.http.post<Producto>(this.apiUrl, producto)
+    // Mapear campos del frontend al formato del backend
+    const backendProducto = {
+      ...producto,
+      categoria_id: producto.categoriaId,
+      imagen_url: producto.imageUrl
+    };
+    
+    // Eliminar campos del frontend que no usa el backend
+    delete (backendProducto as any).categoriaId;
+    delete (backendProducto as any).imageUrl;
+    
+    return this.http.post<any>(this.apiUrl, backendProducto)
       .pipe(
+        map(producto => this.mapBackendToFrontend(producto)),
         catchError((error: HttpErrorResponse) => {
           this.errorHandler.handleProductError(error, 'crear producto');
           return throwError(() => error);
@@ -47,8 +61,20 @@ export class ProductoService {
   }
 
   updateProducto(id: number, producto: ProductoUpdateDto): Observable<Producto> {
-    return this.http.put<Producto>(`${this.apiUrl}/${id}`, producto)
+    // Mapear campos del frontend al formato del backend
+    const backendProducto = {
+      ...producto,
+      categoria_id: producto.categoriaId,
+      imagen_url: producto.imageUrl
+    };
+    
+    // Eliminar campos del frontend que no usa el backend
+    delete (backendProducto as any).categoriaId;
+    delete (backendProducto as any).imageUrl;
+    
+    return this.http.put<any>(`${this.apiUrl}/${id}`, backendProducto)
       .pipe(
+        map(producto => this.mapBackendToFrontend(producto)),
         catchError((error: HttpErrorResponse) => {
           this.errorHandler.handleProductError(error, 'actualizar producto');
           return throwError(() => error);
@@ -64,5 +90,15 @@ export class ProductoService {
           return throwError(() => error);
         })
       );
+  }
+
+  private mapBackendToFrontend(backendProducto: any): Producto {
+    return {
+      ...backendProducto,
+      categoriaId: backendProducto.categoria_id,
+      imageUrl: backendProducto.imagen_url,
+      fechaCreacion: new Date(backendProducto.fecha_creacion),
+      fechaActualizacion: new Date(backendProducto.fecha_actualizacion)
+    };
   }
 }
