@@ -43,12 +43,16 @@ export class ProductoService {
     const backendProducto = {
       ...producto,
       categoria_id: producto.categoriaId,
-      imagen_url: producto.imageUrl
+      imagen_url: producto.imageUrl,
+      precio_mayorista: producto.precioMayorista,
+      cantidad_minima_mayorista: producto.cantidadMinimaMayorista
     };
     
     // Eliminar campos del frontend que no usa el backend
     delete (backendProducto as any).categoriaId;
     delete (backendProducto as any).imageUrl;
+    delete (backendProducto as any).precioMayorista;
+    delete (backendProducto as any).cantidadMinimaMayorista;
     
     return this.http.post<any>(this.apiUrl, backendProducto)
       .pipe(
@@ -65,12 +69,16 @@ export class ProductoService {
     const backendProducto = {
       ...producto,
       categoria_id: producto.categoriaId,
-      imagen_url: producto.imageUrl
+      imagen_url: producto.imageUrl,
+      precio_mayorista: producto.precioMayorista,
+      cantidad_minima_mayorista: producto.cantidadMinimaMayorista
     };
     
     // Eliminar campos del frontend que no usa el backend
     delete (backendProducto as any).categoriaId;
     delete (backendProducto as any).imageUrl;
+    delete (backendProducto as any).precioMayorista;
+    delete (backendProducto as any).cantidadMinimaMayorista;
     
     return this.http.put<any>(`${this.apiUrl}/${id}`, backendProducto)
       .pipe(
@@ -97,6 +105,8 @@ export class ProductoService {
       ...backendProducto,
       categoriaId: backendProducto.categoria_id,
       imageUrl: backendProducto.imagen_url,
+      precioMayorista: backendProducto.precio_mayorista,
+      cantidadMinimaMayorista: backendProducto.cantidad_minima_mayorista,
       fechaCreacion: new Date(backendProducto.fecha_creacion),
       fechaActualizacion: new Date(backendProducto.fecha_actualizacion)
     };

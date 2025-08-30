@@ -1,4 +1,51 @@
-<div>
-  <h1>Catálogo de Productos</h1>
-  <!-- Aquí irá la lista de productos -->
+<div class="container mx-auto p-6">
+
+  <div class="flex justify-between items-center mb-4">
+    <div>
+      <h1 class="text-3xl font-bold">Catálogo de Productos</h1>
+      <p class="text-base-content/70 mt-1">Descubre nuestra deliciosa variedad de helados artesanales</p>
+    </div>
+  </div>
+
+  <!-- Loading State -->
+  <app-loading-spinner
+    [isLoading]="loading"
+    message="Cargando productos..."
+    [showMessage]="true">
+  </app-loading-spinner>
+
+  <!-- Error State -->
+  <div *ngIf="error && !loading" class="alert alert-error max-w-md mx-auto my-8">
+    <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+        d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+    </svg>
+    <div class="flex-1">
+      <p class="font-medium">{{ error }}</p>
+    </div>
+    <button class="btn btn-sm btn-outline" (click)="onRetry()">
+      Reintentar
+    </button>
+  </div>
+
+  <!-- Products Grid -->
+  <div *ngIf="!loading && !error">
+    <!-- Empty State -->
+    <div *ngIf="productos.length === 0" class="hero bg-base-200 rounded-box py-16">
+      <div class="hero-content text-center">
+        <div class="max-w-md">
+          <div class="text-6xl mb-4 opacity-70">🍦</div>
+          <h3 class="text-2xl font-bold mb-2">No hay productos disponibles</h3>
+          <p class="text-base-content/70">Pronto tendremos nuevos productos para ti</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Products Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 py-4">
+      <app-product-card-catalog *ngFor="let producto of productos; trackBy: trackByProductId" [producto]="producto"
+        class="transform transition-all duration-200 hover:-translate-y-1 hover:shadow-lg">
+      </app-product-card-catalog>
+    </div>
+  </div>
 </div>
