@@ -132,7 +132,12 @@ export class ErrorHandlerService {
   }
 
   handleCategoryError(error: HttpErrorResponse, operation: string): ApiError {
-    const context = `gestión de categorías - ${operation}`;
+    const context = `Error al ${operation}`;
+    return this.handleHttpError(error, context);
+  }
+
+  handleProductError(error: HttpErrorResponse, operation: string): ApiError {
+    const context = `Error al ${operation}`;
     return this.handleHttpError(error, context);
   }
 

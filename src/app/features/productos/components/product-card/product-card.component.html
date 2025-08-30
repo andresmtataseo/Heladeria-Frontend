@@ -1,6 +1,59 @@
-<div>
-  <h3>{{ producto?.nombre }}</h3>
-  <p>{{ producto?.sabor }}</p>
-  <p>${{ producto?.precio }}</p>
-  <!-- Aquí irá más información del producto -->
+<div class="card bg-base-100 shadow-xl hover:shadow-2xl transition-shadow duration-300">
+  <div class="card-body">
+    <!-- Encabezado con nombre y precio -->
+    <div class="flex justify-between items-start mb-2">
+      <h3 class="card-title text-lg font-bold truncate flex-1 mr-2">{{ producto.nombre }}</h3>
+      <div class="badge badge-primary badge-lg font-semibold">{{ formatPrice(producto.precio) }}</div>
+    </div>
+
+    <!-- Descripción -->
+    <p class="text-sm text-base-content/70 mb-3 line-clamp-2" *ngIf="producto.descripcion">
+      {{ producto.descripcion }}
+    </p>
+
+    <!-- Información adicional -->
+    <div class="flex flex-wrap gap-2 mb-4">
+      <!-- Stock -->
+      <div class="flex items-center gap-1">
+        <span class="text-xs font-medium">Stock:</span>
+        <span class="badge" [ngClass]="{
+          'badge-success': producto.stock > 10,
+          'badge-warning': producto.stock > 0 && producto.stock <= 10,
+          'badge-error': producto.stock === 0
+        }">
+          {{ producto.stock }}
+        </span>
+      </div>
+
+      <!-- Categoría -->
+      <div class="flex items-center gap-1" *ngIf="producto.categoria">
+        <span class="text-xs font-medium">Categoría:</span>
+        <span class="badge badge-outline badge-sm">{{ producto.categoria.nombre }}</span>
+      </div>
+    </div>
+
+    <!-- Estado -->
+    <div class="flex items-center gap-2 mb-4">
+      <span class="text-xs font-medium">Estado:</span>
+      <div class="badge" [ngClass]="{
+        'badge-success': producto.activo,
+        'badge-error': !producto.activo
+      }">
+        {{ producto.activo ? 'Activo' : 'Inactivo' }}
+      </div>
+    </div>
+
+    <!-- Acciones -->
+    <div class="card-actions justify-end">
+      <button 
+        class="btn btn-sm btn-outline btn-primary" 
+        (click)="editProduct()"
+        title="Editar producto">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+        </svg>
+        Editar
+      </button>
+    </div>
+  </div>
 </div>

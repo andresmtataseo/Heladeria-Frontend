@@ -1,8 +1,8 @@
 <div class="container mx-auto p-6">
   <!-- Loading Spinner -->
-  <app-loading-spinner 
-    [isLoading]="isLoading" 
-    message="Cargando categorías..." 
+  <app-loading-spinner
+    [isLoading]="isLoading"
+    message="Cargando categorías..."
     [showMessage]="true">
   </app-loading-spinner>
 
@@ -29,11 +29,14 @@
           </label>
         </div>
         <div class="form-control w-full md:w-1/3">
-          <select class="select select-bordered w-full" [(ngModel)]="statusFilter" (change)="filterCategorias()">
-            <option value="all">Todos los estados</option>
-            <option value="active">Solo activas</option>
-            <option value="inactive">Solo inactivas</option>
-          </select>
+          <label class="floating-label">
+            <select class="select select-bordered w-full" [(ngModel)]="statusFilter" (change)="filterCategorias()">
+              <option value="all">Todos los estados</option>
+              <option value="active">Solo activas</option>
+              <option value="inactive">Solo inactivas</option>
+            </select>
+            <span>Estado</span>
+          </label>
         </div>
         <button class="btn btn-primary w-full md:w-1/3" (click)="openCreateForm()">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24"
@@ -43,6 +46,15 @@
           Nueva Categoría
         </button>
       </div>
+
+  <div *ngIf="!showForm">
+    <!-- Contador de resultados -->
+    <div class="flex justify-between items-center mb-4">
+      <p class="text-sm text-base-content/70">
+        Mostrando {{ filteredCategorias.length }} de {{ categorias.length }} categorías
+      </p>
+    </div>
+  </div>
 
   <!-- Categories Grid -->
   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-6" *ngIf="!showForm">

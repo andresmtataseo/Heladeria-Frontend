@@ -1,4 +1,116 @@
-<div>
-  <h1>Gestión de Productos</h1>
-  <!-- Aquí irá la tabla de productos con opciones CRUD -->
+<div class="container mx-auto p-6">
+  <!-- Encabezado -->
+  <div class="flex justify-between items-center mb-6">
+    <h1 class="text-3xl font-bold">Gestión de Productos</h1>
+  </div>
+
+  <!-- Filtros y búsqueda -->
+  <div class="mb-6" *ngIf="!showForm">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <!-- Búsqueda -->
+        <div class="form-control">
+          <label class="input input-bordered flex items-center gap-2">
+            <svg class="h-[1em] opacity-50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+              <g stroke-linejoin="round" stroke-linecap="round" stroke-width="2.5" fill="none" stroke="currentColor">
+                <circle cx="11" cy="11" r="8"></circle>
+                <path d="m21 21-4.3-4.3"></path>
+              </g>
+            </svg>
+            <input type="search" placeholder="Buscar por nombre o descripción..." class="grow"
+              [(ngModel)]="searchTerm" (input)="onSearchChange()" />
+          </label>
+        </div>
+
+        <!-- Filtro por estado -->
+        <div class="form-control">
+          <label class="floating-label">
+            <select class="select select-bordered w-full" [(ngModel)]="filterStatus" (change)="onFilterChange()">
+              <option value="all">Todos los estados</option>
+              <option value="active">Activos</option>
+              <option value="inactive">Inactivos</option>
+            </select>
+            <span>Estado</span>
+          </label>
+        </div>
+
+        <!-- Filtro por categoría -->
+        <div class="form-control">
+          <label class="floating-label">
+            <select class="select select-bordered w-full" [(ngModel)]="filterCategory" (change)="onFilterChange()">
+              <option value="all">Todas las categorías</option>
+              <option *ngFor="let category of getUniqueCategories()" [value]="category.id">
+                {{ category.nombre }}
+              </option>
+            </select>
+            <span>Categoría</span>
+          </label>
+        </div>
+
+        <button class="btn btn-primary" (click)="showCreateForm()" [disabled]="isLoading">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24"
+            stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+          </svg>
+          Nuevo Producto
+        </button>
+      </div>
+  </div>
+
+  <!-- Formulario de producto -->
+  <div class="mb-6" *ngIf="showForm">
+    <div class="fixed inset-0 bg-black/20 backdrop-blur-sm z-40 flex items-center justify-center p-4">
+      <div class="w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+        <app-product-form [producto]="editingProduct" [isEdit]="!!editingProduct" (onSubmit)="handleFormSubmit($event)"
+          (onCancel)="handleFormCancel()">
+        </app-product-form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Lista de productos -->
+  <div *ngIf="!showForm">
+    <!-- Contador de resultados -->
+    <div class="flex justify-between items-center mb-4">
+      <p class="text-sm text-base-content/70">
+        Mostrando {{ filteredProductos.length }} de {{ productos.length }} productos
+      </p>
+    </div>
+
+    <!-- Grid de productos -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
+      *ngIf="filteredProductos.length > 0">
+      <app-product-card *ngFor="let producto of filteredProductos; trackBy: trackByProductId" [producto]="producto"
+        (onEdit)="onEditProduct($event)">
+      </app-product-card>
+    </div>
+
+    <!-- Estado vacío -->
+    <div class="text-center py-12" *ngIf="filteredProductos.length === 0 && !isLoading">
+      <div class="max-w-md mx-auto">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-24 w-24 mx-auto text-base-content/30 mb-4" fill="none"
+          viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1"
+            d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+        </svg>
+        <h3 class="text-xl font-semibold mb-2">No se encontraron productos</h3>
+        <p class="text-base-content/70 mb-4">
+          {{ searchTerm || filterStatus !== 'all' || filterCategory !== 'all'
+          ? 'No hay productos que coincidan con los filtros aplicados.'
+          : 'Aún no has creado ningún producto.' }}
+        </p>
+        <button class="btn btn-primary" (click)="showCreateForm()"
+          *ngIf="!searchTerm && filterStatus === 'all' && filterCategory === 'all'">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24"
+            stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+          </svg>
+          Crear primer producto
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Loading Spinner -->
+  <app-loading-spinner [isLoading]="isLoading" message="Cargando productos..." [showMessage]="true">
+  </app-loading-spinner>
 </div>

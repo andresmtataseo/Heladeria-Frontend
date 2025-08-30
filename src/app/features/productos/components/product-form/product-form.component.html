@@ -1,23 +1,157 @@
-<form>
-  <h2>{{ isEdit ? 'Editar Producto' : 'Crear Producto' }}</h2>
+<div class="card bg-base-100 shadow-xl">
+  <div class="card-body">
+    <h2 class="card-title mb-4">{{ isEdit ? 'Editar Producto' : 'Nuevo Producto' }}</h2>
 
-  <div>
-    <label for="nombre">Nombre:</label>
-    <input type="text" id="nombre" name="nombre" required>
-  </div>
+    <form (ngSubmit)="submitForm()" #productForm="ngForm">
+      <!-- Nombre -->
+      <fieldset class="fieldset mb-4">
+        <legend class="fieldset-legend">Nombre del producto</legend>
+        <input
+          type="text"
+          name="nombre"
+          [(ngModel)]="formData.nombre"
+          placeholder="Ingrese el nombre del producto"
+          class="input input-bordered w-full"
+          required
+          #nombre="ngModel" />
+        <p class="label text-error" *ngIf="nombre.invalid && nombre.touched">El nombre es requerido</p>
+      </fieldset>
 
-  <div>
-    <label for="sabor">Sabor:</label>
-    <input type="text" id="sabor" name="sabor" required>
-  </div>
+      <!-- Sabor -->
+      <fieldset class="fieldset mb-4">
+        <legend class="fieldset-legend">Sabor</legend>
+        <input
+          type="text"
+          name="sabor"
+          [(ngModel)]="formData.sabor"
+          placeholder="Ingrese el sabor del producto"
+          class="input input-bordered w-full"
+          required
+          #sabor="ngModel" />
+        <p class="label text-error" *ngIf="sabor.invalid && sabor.touched">El sabor es requerido</p>
+      </fieldset>
 
-  <div>
-    <label for="precio">Precio:</label>
-    <input type="number" id="precio" name="precio" step="0.01" required>
-  </div>
+      <!-- Descripción -->
+      <fieldset class="fieldset mb-4">
+        <legend class="fieldset-legend">Descripción</legend>
+        <textarea
+          name="descripcion"
+          [(ngModel)]="formData.descripcion"
+          class="textarea textarea-bordered w-full"
+          placeholder="Ingrese la descripción del producto"
+          rows="3"></textarea>
+        <p class="label">Opcional</p>
+      </fieldset>
 
-  <div>
-    <button type="submit">{{ isEdit ? 'Actualizar' : 'Crear' }}</button>
-    <button type="button" (click)="onCancel.emit()">Cancelar</button>
+      <!-- Precio y Stock en una fila -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+        <!-- Precio -->
+        <fieldset class="fieldset">
+          <legend class="fieldset-legend">Precio *</legend>
+          <div class="relative">
+            <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-base-content/60">$</span>
+            <input
+              type="number"
+              name="precio"
+              [(ngModel)]="formData.precio"
+              placeholder="0"
+              class="input input-bordered w-full pl-8"
+              min="0"
+              step="0.01"
+              required
+              #precio="ngModel" />
+          </div>
+          <p class="label text-error" *ngIf="precio.invalid && precio.touched">El precio es requerido</p>
+        </fieldset>
+
+        <!-- Stock -->
+        <fieldset class="fieldset">
+          <legend class="fieldset-legend">Stock</legend>
+          <input
+            type="number"
+            name="stock"
+            [(ngModel)]="formData.stock"
+            placeholder="0"
+            class="input input-bordered w-full"
+            min="0"
+            #stock="ngModel" />
+          <p class="label">Opcional (por defecto: 0)</p>
+        </fieldset>
+      </div>
+
+      <!-- Precio Mayorista y Cantidad Mínima -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+        <!-- Precio Mayorista -->
+        <fieldset class="fieldset">
+          <legend class="fieldset-legend">Precio Mayorista</legend>
+          <div class="relative">
+            <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-base-content/60">$</span>
+            <input
+              type="number"
+              name="precioMayorista"
+              [(ngModel)]="formData.precioMayorista"
+              placeholder="0"
+              class="input input-bordered w-full pl-8"
+              [class.input-error]="!isPrecioMayoristaValid()"
+              min="0"
+              step="0.01"
+              #precioMayorista="ngModel" />
+          </div>
+          <p class="label text-error" *ngIf="!isPrecioMayoristaValid()">El precio mayorista debe ser menor o igual al precio regular</p>
+          <p class="label" *ngIf="isPrecioMayoristaValid()">Opcional (debe ser menor o igual al precio regular)</p>
+        </fieldset>
+
+        <!-- Cantidad Mínima Mayorista -->
+        <fieldset class="fieldset">
+          <legend class="fieldset-legend">Cantidad Mínima Mayorista</legend>
+          <input
+            type="number"
+            name="cantidadMinimaMayorista"
+            [(ngModel)]="formData.cantidadMinimaMayorista"
+            placeholder="0"
+            class="input input-bordered w-full"
+            [class.input-error]="!isCantidadMinimaValid()"
+            min="0"
+            #cantidadMinima="ngModel" />
+          <p class="label text-error" *ngIf="!isCantidadMinimaValid()">Se requiere cantidad mínima cuando hay precio mayorista</p>
+          <p class="label" *ngIf="isCantidadMinimaValid()">Opcional (cantidad mínima para precio mayorista)</p>
+        </fieldset>
+      </div>
+
+      <!-- Categoría -->
+      <fieldset class="fieldset mb-4">
+        <legend class="fieldset-legend">Categoría *</legend>
+        <select
+          name="categoriaId"
+          [(ngModel)]="formData.categoriaId"
+          class="select select-bordered w-full"
+          required
+          #categoria="ngModel">
+          <option value="" disabled>Selecciona una categoría</option>
+          <option *ngFor="let categoria of categorias" [value]="categoria.id">
+            {{ categoria.nombre }}
+          </option>
+        </select>
+        <p class="label text-error" *ngIf="categoria.invalid && categoria.touched">La categoría es requerida</p>
+        <p class="label text-info" *ngIf="isLoadingCategorias">Cargando categorías...</p>
+      </fieldset>
+
+      <fieldset class="fieldset mb-6">
+        <legend class="fieldset-legend">Estado del producto</legend>
+        <label class="label cursor-pointer justify-start">
+          <input type="checkbox" name="activo" [(ngModel)]="formData.activo" class="checkbox checkbox-primary mr-3" />
+          <span class="label-text">Producto activo</span>
+        </label>
+      </fieldset>
+
+      <!-- Botones -->
+      <div class="card-actions justify-end">
+        <button type="button" class="btn btn-ghost" (click)="cancelForm()">Cancelar</button>
+        <button type="submit" class="btn btn-primary"
+          [disabled]="productForm.invalid || isLoadingCategorias || !validateForm()">
+          {{ isEdit ? 'Actualizar' : 'Crear' }}
+        </button>
+      </div>
+    </form>
   </div>
-</form>
+</div>
