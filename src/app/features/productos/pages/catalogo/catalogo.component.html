@@ -44,8 +44,17 @@
     <!-- Products Grid -->
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 py-4">
       <app-product-card-catalog *ngFor="let producto of productos; trackBy: trackByProductId" [producto]="producto"
-        class="transform transition-all duration-200 hover:-translate-y-1 hover:shadow-lg">
+        (click)="openProductModal(producto)"
+        class="cursor-pointer hover:scale-105 transition-transform duration-200">
       </app-product-card-catalog>
     </div>
   </div>
 </div>
+
+<!-- Modal de detalles del producto -->
+<app-detalle 
+  *ngIf="isModalVisible"
+  [product]="selectedProduct"
+  [isVisible]="isModalVisible"
+  (closeModal)="closeProductModal()">
+</app-detalle>

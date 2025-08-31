@@ -1,4 +1,4 @@
-<div class="card bg-base-100 w-full shadow-sm hover:shadow-lg transition-shadow duration-300">
+<div class="card bg-base-100 w-full shadow-sm hover:shadow-lg transition-shadow duration-300" [class.animate-fade-in]="!isClosing" [class.animate-fade-out]="isClosing">
   <!-- Imagen del producto -->
   <figure class="h-56 overflow-hidden bg-base-200 flex items-center justify-center relative">
     <img [src]="imageUrl" [alt]="producto.nombre"
@@ -18,7 +18,7 @@
     </div>
 
     <!-- Categoría -->
-    <div class="absolute top-3 right-3" *ngIf="producto.categoria">
+    <div class="absolute top-3 left-3" *ngIf="producto.categoria">
       <div class="badge badge-outline badge-primary">
         {{ producto.categoria.nombre }}
       </div>

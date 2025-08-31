@@ -21,6 +21,8 @@ export class CategoryFormComponent implements OnInit {
     descripcion: '',
     activo: true
   };
+  
+  isClosing: boolean = false;
 
   ngOnInit() {
     if (this.categoria && this.isEdit) {
@@ -44,6 +46,17 @@ export class CategoryFormComponent implements OnInit {
   }
 
   cancelForm() {
-    this.onCancel.emit();
+    this.closeWithAnimation(() => {
+      this.onCancel.emit();
+    });
+  }
+  
+  // Método para aplicar animación de salida
+  closeWithAnimation(callback?: () => void) {
+    this.isClosing = true;
+    setTimeout(() => {
+      this.isClosing = false;
+      if (callback) callback();
+    }, 300);
   }
 }

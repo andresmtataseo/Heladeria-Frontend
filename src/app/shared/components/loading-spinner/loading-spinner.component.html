@@ -2,6 +2,8 @@
 <div 
   *ngIf="isLoading" 
   class="fixed inset-0 bg-black/20 backdrop-blur-sm flex items-center justify-center z-50"
+  [class.animate-fade-in]="!isClosing" 
+  [class.animate-fade-out]="isClosing"
   (click)="$event.stopPropagation()"
   (keydown)="$event.stopPropagation()">
   

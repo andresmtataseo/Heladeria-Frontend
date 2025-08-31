@@ -15,4 +15,15 @@ export class LoadingSpinnerComponent {
   @Input() message: string = 'Cargando...';
 
   @Input() showMessage: boolean = true;
+  
+  isClosing: boolean = false;
+  
+  // Método para aplicar animación de salida
+  closeWithAnimation(callback?: () => void) {
+    this.isClosing = true;
+    setTimeout(() => {
+      this.isClosing = false;
+      if (callback) callback();
+    }, 300);
+  }
 }

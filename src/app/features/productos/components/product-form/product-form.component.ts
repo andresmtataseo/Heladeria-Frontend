@@ -32,6 +32,7 @@ export class ProductFormComponent implements OnInit, OnChanges {
 
   categorias: Categoria[] = [];
   isLoadingCategorias = false;
+  isClosing: boolean = false;
 
   constructor(private categoriaService: CategoriaService) {}
 
@@ -109,8 +110,10 @@ export class ProductFormComponent implements OnInit, OnChanges {
   }
 
   cancelForm(): void {
-    this.resetForm();
-    this.onCancel.emit();
+    this.closeWithAnimation(() => {
+      this.resetForm();
+      this.onCancel.emit();
+    });
   }
 
   private resetForm(): void {
@@ -126,5 +129,14 @@ export class ProductFormComponent implements OnInit, OnChanges {
       activo: true,
       imageUrl: ''
     };
+  }
+  
+  // Método para aplicar animación de salida
+  closeWithAnimation(callback?: () => void) {
+    this.isClosing = true;
+    setTimeout(() => {
+      this.isClosing = false;
+      if (callback) callback();
+    }, 300);
   }
 }

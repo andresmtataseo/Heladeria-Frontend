@@ -1,4 +1,95 @@
-<div>
-  <h1>Detalle del Producto</h1>
-  <!-- Aquí irá la información detallada del producto -->
+<!-- Modal Overlay con fondo borroso -->
+<div *ngIf="isVisible" class="fixed inset-0 backdrop-blur-md flex items-center justify-center z-50 p-4" [class.animate-fade-in]="!isClosing" [class.animate-fade-out]="isClosing" (click)="onOverlayClick($event)">
+  <!-- Modal Container -->
+  <div class="relative bg-white rounded-2xl shadow-2xl max-w-6xl w-full max-h-[90vh] overflow-y-auto" [class.animate-slide-in]="!isClosing" [class.animate-slide-out]="isClosing" (click)="$event.stopPropagation()">
+    <!-- Botón de cierre -->
+    <button class="absolute top-4 right-4 z-10 btn btn-circle btn-sm bg-primary bg-opacity-70 text-white border-none hover:bg-primary hover:bg-opacity-90 hover:scale-110 transition-all duration-200" (click)="close()" aria-label="Cerrar modal">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+      </svg>
+    </button>
+
+    <!-- Contenido del Modal -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-0 min-h-[500px]" *ngIf="product">
+      <!-- Sección de imagen ampliada -->
+      <div class="bg-base-200 flex items-center justify-center relative rounded-t-2xl lg:rounded-l-2xl lg:rounded-tr-none">
+        <div class="w-full h-full flex items-center justify-center relative min-h-[400px]">
+          <img [src]="imageUrl" [alt]="product.nombre"
+            class="w-full h-full object-cover rounded-t-2xl lg:rounded-l-2xl lg:rounded-tr-none" (error)="onImageError()"
+            (load)="onImageLoad()" [style.display]="imageLoaded && !imageError ? 'block' : 'none'" />
+
+          <!-- Placeholder cuando no hay imagen -->
+          <div class="flex flex-col items-center justify-center text-base-content text-opacity-60 text-center p-8" [style.display]="!imageLoaded || imageError ? 'flex' : 'none'">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-16 h-16 mb-4 opacity-50" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1"
+                d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+            </svg>
+            <span class="text-xl font-semibold mb-2">{{ product.nombre }}</span>
+            <span class="text-sm opacity-70">Sin imagen disponible</span>
+          </div>
+
+          <!-- Categoría badge -->
+          <div class="absolute top-4 left-4 badge badge-outline badge-primary badge-lg font-medium shadow-lg" *ngIf="product.categoria?.nombre">
+            {{ product.categoria?.nombre }}
+          </div>
+        </div>
+      </div>
+
+      <!-- Sección de información del producto -->
+      <div class="p-8 flex flex-col gap-6 bg-white rounded-b-2xl lg:rounded-r-2xl lg:rounded-bl-none">
+        <!-- Título principal -->
+        <div class="border-b border-base-300 pb-6">
+          <h1 class="text-3xl font-bold text-base-content mb-4 leading-tight">{{ product.nombre }}</h1>
+
+        <div class="flex items-center gap-2 mb-2" *ngIf="product.categoria">
+            <span class="font-semibold text-primary text-base">Categoría:</span>
+            <span class="text-base text-base-content font-medium">{{ product.categoria?.nombre }}</span>
+          </div>
+
+          <!-- Sabor destacado -->
+          <div class="flex items-center gap-2" *ngIf="product.sabor">
+            <span class="font-semibold text-primary text-base">Sabor:</span>
+            <span class="text-base text-base-content font-medium">{{ product.sabor }}</span>
+          </div>
+        </div>
+
+        <!-- Descripción del producto -->
+        <div class="border-b border-base-300 pb-6" *ngIf="product.descripcion">
+          <h3 class="text-xl font-semibold text-base-content mb-3">Descripción</h3>
+          <p class="text-base leading-relaxed text-base-content text-opacity-80">{{ product.descripcion }}</p>
+        </div>
+
+        <!-- Sección de precios -->
+
+          <h3 class="text-xl font-semibold text-base-content mb-4">Precios</h3>
+
+          <!-- Contenedor de precios con fondo gris -->
+          <div class="bg-base-200 rounded-lg p-4">
+            <!-- Precio al detal -->
+            <div class="flex items-center justify-between mb-3">
+              <div class="flex flex-col">
+                <span class="text-sm font-medium text-base-content/80">Precio al detal</span>
+                <span class="text-xs text-base-content/60">Compra individual</span>
+              </div>
+              <div class="text-right">
+                <span class="text-2xl font-bold text-primary">{{ formatPrice(product.precio) }}</span>
+              </div>
+            </div>
+
+            <!-- Precio al mayor -->
+            <div class="border-t border-base-300 pt-3" *ngIf="hasMayoristaPrice()">
+              <div class="flex items-center justify-between">
+                <div class="flex flex-col">
+                  <span class="text-sm font-medium text-base-content/80">Precio mayorista</span>
+                  <span class="text-xs text-base-content/60">Mín. {{ product.cantidadMinimaMayorista }} unidades</span>
+                </div>
+                <div class="text-right">
+                   <span class="text-2xl font-bold text-primary">{{ formatPrice(product.precioMayorista!) }}</span>
+                 </div>
+              </div>
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

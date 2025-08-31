@@ -15,6 +15,7 @@ export class ProductCardComponent implements OnInit, OnChanges {
 
   imageUrl: string = '';
   showImage: boolean = false;
+  isClosing: boolean = false;
 
   ngOnInit(): void {
     this.setImageUrl();
@@ -52,5 +53,14 @@ export class ProductCardComponent implements OnInit, OnChanges {
       currency: 'COP',
       minimumFractionDigits: 0
     }).format(price);
+  }
+  
+  // Método para aplicar animación de salida
+  closeWithAnimation(callback?: () => void) {
+    this.isClosing = true;
+    setTimeout(() => {
+      this.isClosing = false;
+      if (callback) callback();
+    }, 300);
   }
 }

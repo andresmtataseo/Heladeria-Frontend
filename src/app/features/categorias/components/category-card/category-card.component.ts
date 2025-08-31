@@ -12,8 +12,19 @@ import { NgClass } from '@angular/common';
 export class CategoryCardComponent {
   @Input() categoria!: Categoria;
   @Output() onEdit = new EventEmitter<Categoria>();
+  
+  isClosing: boolean = false;
 
   editCategory() {
     this.onEdit.emit(this.categoria);
+  }
+  
+  // Método para aplicar animación de salida
+  closeWithAnimation(callback?: () => void) {
+    this.isClosing = true;
+    setTimeout(() => {
+      this.isClosing = false;
+      if (callback) callback();
+    }, 300);
   }
 }

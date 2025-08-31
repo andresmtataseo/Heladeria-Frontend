@@ -1,5 +1,5 @@
 <div
-  class="card bg-base-100 w-full shadow-sm hover:shadow-lg transition-shadow duration-300">
+  class="card bg-base-100 w-full shadow-sm hover:shadow-lg transition-shadow duration-300" [class.animate-fade-in]="!isClosing" [class.animate-fade-out]="isClosing">
   <div class="card-body">
     <div class="flex justify-between items-start">
       <h2 class="card-title">{{ categoria.nombre }}</h2>

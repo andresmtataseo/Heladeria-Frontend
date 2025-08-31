@@ -1,4 +1,4 @@
-<div class="card bg-base-100 shadow-xl">
+<div class="card bg-base-100 shadow-xl" [class.animate-slide-in]="!isClosing" [class.animate-slide-out]="isClosing">
   <div class="card-body">
     <h2 class="card-title mb-4">{{ isEdit ? 'Editar Categoría' : 'Nueva Categoría' }}</h2>
 
