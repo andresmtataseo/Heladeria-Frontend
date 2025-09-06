@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { environment } from '../../../../environments/environment';
 
 interface SocialLink {
   name: string;
@@ -35,17 +36,17 @@ export class FooterComponent {
   readonly socialLinks: SocialLink[] = [
     {
       name: 'Instagram',
-      url: 'https://www.instagram.com/heladosdonalonso',
+      url: environment.socialMedia.instagram,
       icon: 'instagram'
     },
     {
       name: 'TikTok',
-      url: 'https://www.tiktok.com/@heladosdonalonsomcbo',
+      url: environment.socialMedia.tiktok,
       icon: 'tiktok'
     },
     {
       name: 'WhatsApp',
-      url: 'https://wa.me/584246563703',
+      url: environment.socialMedia.whatsapp,
       icon: 'whatsapp'
     }
   ];

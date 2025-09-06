@@ -1,6 +1,8 @@
 import { Component, OnInit, OnDestroy, Inject, PLATFORM_ID, HostListener } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { environment } from '../../../environments/environment';
 
 interface TikTokVideo {
   id: string;
@@ -17,23 +19,11 @@ interface TikTokVideo {
 })
 export class HomeComponent implements OnInit, OnDestroy {
 
-  tiktokVideos: TikTokVideo[] = [
-    {
-      id: '1',
-      url: 'https://www.tiktok.com/@heladosdonalonsomcbo/video/7411741921351142662',
-      videoId: '7411741921351142662'
-    },
-    {
-      id: '2',
-      url: 'https://www.tiktok.com/@heladosdonalonsomcbo/video/7418753532960165126',
-      videoId: '7418753532960165126'
-    },
-    {
-      id: '3',
-      url: 'https://www.tiktok.com/@heladosdonalonsomcbo/video/7420595203527937286',
-      videoId: '7420595203527937286'
-    }
-  ];
+  tiktokVideos: TikTokVideo[] = environment.featuredVideos.map(video => ({
+    id: video.id,
+    url: video.url,
+    videoId: video.url.split('/').pop() || ''
+  }));
 
   videosToShow: number = 3;
 
@@ -66,10 +56,16 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   readonly sectionTitle = 'Síguenos en TikTok';
   readonly sectionDescription = 'Descubre nuestros deliciosos helados y momentos especiales en nuestros videos de TikTok';
-  readonly profileUrl = 'https://www.tiktok.com/@heladosdonalonsomcbo';
+  readonly profileUrl = environment.socialMedia.tiktok;
   readonly ctaButtonText = 'Ver más en TikTok';
+  readonly googleMapsUrl: SafeResourceUrl;
 
-  constructor(@Inject(PLATFORM_ID) private platformId: Object) {}
+  constructor(
+    @Inject(PLATFORM_ID) private platformId: Object,
+    private sanitizer: DomSanitizer
+  ) {
+    this.googleMapsUrl = this.sanitizer.bypassSecurityTrustResourceUrl(environment.external.googleMapsEmbed);
+  }
 
   ngOnInit(): void {
     if (isPlatformBrowser(this.platformId)) {
@@ -83,12 +79,12 @@ export class HomeComponent implements OnInit, OnDestroy {
 
 
   private loadTikTokScript(): void {
-    if (document.querySelector('script[src="https://www.tiktok.com/embed.js"]')) {
+    if (document.querySelector(`script[src="${environment.external.tiktokEmbedScript}"]`)) {
       return;
     }
 
     const script = document.createElement('script');
-    script.src = 'https://www.tiktok.com/embed.js';
+    script.src = environment.external.tiktokEmbedScript;
     script.async = true;
     script.onload = () => {
       console.log('TikTok embed script cargado correctamente');

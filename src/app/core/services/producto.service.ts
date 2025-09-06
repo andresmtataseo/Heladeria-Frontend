@@ -4,12 +4,13 @@ import { Observable, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { Producto, ProductoCreateDto, ProductoUpdateDto } from '../models';
 import { ErrorHandlerService } from './error-handler.service';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ProductoService {
-  private apiUrl = 'http://localhost:8000/api/v1/productos';
+  private apiUrl = `${environment.apiUrl}${environment.endpoints.productos}`;
 
   constructor(
     private http: HttpClient,

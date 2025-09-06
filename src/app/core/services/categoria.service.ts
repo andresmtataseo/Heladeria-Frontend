@@ -4,12 +4,13 @@ import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { Categoria, CategoriaCreateDto, CategoriaUpdateDto } from '../models';
 import { ErrorHandlerService } from './error-handler.service';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CategoriaService {
-  private apiUrl = 'http://localhost:8000/api/v1/categorias';
+  private apiUrl = `${environment.apiUrl}${environment.endpoints.categorias}`;
 
   constructor(
     private http: HttpClient,
